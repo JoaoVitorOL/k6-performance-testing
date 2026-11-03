@@ -1,3 +1,5 @@
+
+testar pipeline
 # Grafana K6 Performance Testing
 
 ## GitHub Actions + SonarCloud
