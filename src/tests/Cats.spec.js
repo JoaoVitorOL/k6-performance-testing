@@ -11,7 +11,7 @@ export const RateContentOK = new Rate('content_OK');
 export const options = {
   thresholds: {
     // 2. Aumentamos a tolerância de falhas para APIs públicas de teste
-    http_req_failed: ['rate<0.30'], 
+    http_req_failed: ['rate<0.30'],
     get_cat_fact_duration: ['p(95)<1500'],
     content_OK: ['rate>0.70']
   },

@@ -1,5 +1,7 @@
 
-testar pipeline
+ Httpbin.org (A melhor opção para Teste de Carga Puro)Se o seu objetivo principal com o k6 não é testar regras de negócio de um banco de dados fictício, mas sim estressar a capacidade de processamento de requisições HTTP (testar rede, serialização JSON, headers e tempos de resposta sob carga pesada), o httpbin é a ferramenta definitiva. Ele ecoa de volta exatamente o que você envia.   Métodos suportados: GET, POST, PUT, PATCH, DELETE, etc.   Autenticação: NenhumaEndpoints úteis para k6:Enviar dados e testar POST (POST): [https://httpbin.org/post](https://httpbin.org/post)Enviar dados e testar PUT (PUT): [https://httpbin.org/put](https://httpbin.org/put)Simular atraso de resposta (ideal para testar timeouts no k6): [https://httpbin.org/delay/2](https://httpbin.org/delay/2)
+
+ 
 # Grafana K6 Performance Testing
 
 ## GitHub Actions + SonarCloud
