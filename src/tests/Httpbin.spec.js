@@ -31,7 +31,9 @@ export function handleSummary(data) {
 }
 
 export default function () {
-  const endpoint = __ITER % 3;
+  // Spread each VU's requests to stay below httpbin.org's 2 req/s per-IP limit.
+  sleep(__VU * 0.75);
+  const endpoint = (__VU + __ITER) % 3;
   const params = {
     headers: {
       'Content-Type': 'application/json',
