@@ -18,7 +18,16 @@ jobs:
 
       - name: Setup K6
         uses: grafana/setup-k6-action@v1.2.2
-      - name: Run local k6 test
+
+      - name: Run official httpbin k6 test
         uses: grafana/run-k6-action@v1.4.0
         with:
           path: src/tests/Httpbin.spec.js
+
+      - name: Upload k6 report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: httpbin-k6-report
+          path: src/output/httpbin.html
+          if-no-files-found: ignore
