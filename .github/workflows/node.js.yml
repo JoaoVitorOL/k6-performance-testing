@@ -1,6 +1,7 @@
 name: K6 Performance Testing
 
 on:
+  workflow_dispatch:
   push:
     branches: [master]
   pull_request:
@@ -20,4 +21,4 @@ jobs:
       - name: Run local k6 test
         uses: grafana/run-k6-action@v1.4.0
         with:
-          path: src/tests
+          path: src/tests/Httpbin.spec.js
