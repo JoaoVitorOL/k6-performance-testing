@@ -10,10 +10,15 @@ const postDuration = new Trend('httpbin_post_duration', true);
 const putDuration = new Trend('httpbin_put_duration', true);
 const delayDuration = new Trend('httpbin_delay_duration', true);
 
+// GitHub Actions runners do not support IPv6 routing (network unreachable).
+// Local machines behind CGNAT IPv4 need preferIPv6 to avoid shared IP rate-limiting.
+const isCI = __ENV.CI === 'true' || __ENV.GITHUB_ACTIONS === 'true';
+const dnsPolicy = __ENV.K6_DNS_POLICY || (isCI ? 'preferIPv4' : 'preferIPv6');
+
 export const options = {
   vus: 7,
   dns: {
-    policy: 'preferIPv6'
+    policy: dnsPolicy
   },
   thresholds: {
     checks: ['rate>0.80'],
@@ -34,25 +39,24 @@ export function handleSummary(data) {
   };
 }
 
-function sendRequest(method, url, body, params) {
+function sendRequest(method, url, body, params, maxRetries = 2) {
   let res;
-  if (method === 'POST') {
-    res = http.post(url, body, params);
-  } else if (method === 'PUT') {
-    res = http.put(url, body, params);
-  } else {
-    res = http.get(url, params);
-  }
-
-  // Gracefully retry once on rate-limit (429) or transient gateway errors
-  if (res.status === 429 || res.status >= 500) {
-    sleep(1.5);
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
     if (method === 'POST') {
       res = http.post(url, body, params);
     } else if (method === 'PUT') {
       res = http.put(url, body, params);
     } else {
       res = http.get(url, params);
+    }
+
+    // Success or client error other than 429
+    if (res.status !== 429 && res.status < 500) {
+      return res;
+    }
+
+    if (attempt < maxRetries) {
+      sleep(1.5 + Math.random());
     }
   }
 
